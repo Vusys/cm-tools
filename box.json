@@ -1,0 +1,7 @@
+{
+    "output": "builds/cm-tools.phar",
+    "directories": ["src", "vendor"],
+    "files": ["composer.json"],
+    "compression": "GZ",
+    "banner": false
+}

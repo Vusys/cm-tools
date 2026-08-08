@@ -1,0 +1,35 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build phar
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - uses: shivammathur/setup-php@0f7f1d08e3e32076e51cae65eb0b0c871405b16 # v2.31.1
+        with:
+          php-version: '8.4'
+          tools: box
+          coverage: none
+
+      - uses: ramsey/composer-install@3.1.1
+        with:
+          composer-options: --no-dev --optimize-autoloader
+
+      - run: box compile
+
+      - run: |
+          cp builds/cm-tools.phar cm-tools
+          chmod +x cm-tools
+
+      - uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2.4.0
+        with:
+          files: cm-tools

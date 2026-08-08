@@ -1,0 +1,300 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Vusys\CmTools\Reflow;
+
+use League\CommonMark\Extension\CommonMark\Node\Block\BlockQuote;
+use League\CommonMark\Extension\CommonMark\Node\Block\FencedCode;
+use League\CommonMark\Extension\CommonMark\Node\Block\Heading;
+use League\CommonMark\Extension\CommonMark\Node\Block\HtmlBlock;
+use League\CommonMark\Extension\CommonMark\Node\Block\IndentedCode;
+use League\CommonMark\Extension\CommonMark\Node\Block\ListBlock;
+use League\CommonMark\Extension\CommonMark\Node\Block\ListItem;
+use League\CommonMark\Extension\CommonMark\Node\Block\ThematicBreak;
+use League\CommonMark\Extension\Footnote\Node\Footnote;
+use League\CommonMark\Extension\Table\Table;
+use League\CommonMark\Extension\Table\TableCell;
+use League\CommonMark\Extension\Table\TableRow;
+use League\CommonMark\Extension\Table\TableSection;
+use League\CommonMark\Node\Block\Document;
+use League\CommonMark\Node\Block\Paragraph;
+use League\CommonMark\Node\Node;
+
+/**
+ * Walks a parsed {@see Document} and re-serialises it to CommonMark source, either wrapped to
+ * a fixed column width or unwrapped to one line per logical block.
+ *
+ * `$indent` is threaded through every render call purely so a nested paragraph (inside a
+ * blockquote or list item) knows how much width its ancestors' prefixes ("> ", "  ") will
+ * consume, and can wrap narrower accordingly — the prefixes themselves are applied once, by
+ * the immediate parent, via {@see self::prefixLines()}.
+ */
+final readonly class BlockRenderer
+{
+    private InlineRenderer $inline;
+
+    public function __construct(private ?int $width)
+    {
+        $this->inline = new InlineRenderer;
+    }
+
+    public function render(Document $document): string
+    {
+        return rtrim($this->renderBlocks($document->children(), '')).PHP_EOL;
+    }
+
+    /**
+     * @param  iterable<Node>  $blocks
+     */
+    private function renderBlocks(iterable $blocks, string $indent): string
+    {
+        $rendered = [];
+
+        foreach ($blocks as $block) {
+            $text = $this->renderBlock($block, $indent);
+
+            if ($text !== '') {
+                $rendered[] = $text;
+            }
+        }
+
+        return implode("\n\n", $rendered);
+    }
+
+    private function renderBlock(Node $block, string $indent): string
+    {
+        return match (true) {
+            $block instanceof Paragraph => $this->renderParagraph($block, $indent),
+            $block instanceof Heading => $this->renderHeading($block),
+            $block instanceof ThematicBreak => '---',
+            $block instanceof BlockQuote => $this->prefixLines($this->renderBlocks($block->children(), $indent.'> '), '> ', '> '),
+            $block instanceof FencedCode => $this->renderFencedCode($block),
+            $block instanceof IndentedCode => $this->renderIndentedCode($block),
+            $block instanceof HtmlBlock => rtrim($block->getLiteral()),
+            $block instanceof ListBlock => $this->renderList($block, $indent),
+            $block instanceof Table => $this->renderTable($block),
+            $block instanceof Footnote => $this->renderFootnote($block, $indent),
+            default => $this->renderBlocks($block->children(), $indent),
+        };
+    }
+
+    private function renderParagraph(Paragraph $paragraph, string $indent): string
+    {
+        $text = $this->inline->render($paragraph->children());
+        $atoms = Tokenizer::tokenize($text);
+        $available = $this->width === null ? null : max(1, $this->width - mb_strlen($indent));
+
+        return implode("\n", LinePacker::pack($atoms, $available));
+    }
+
+    private function renderHeading(Heading $heading): string
+    {
+        $text = $this->collapseHardBreaks($this->inline->render($heading->children()));
+
+        return str_repeat('#', $heading->getLevel()).' '.$text;
+    }
+
+    private function renderFencedCode(FencedCode $node): string
+    {
+        $fence = str_repeat($node->getChar(), max(3, $node->getLength()));
+        $info = $node->getInfo();
+        $opening = $info === null || $info === '' ? $fence : $fence.$info;
+
+        return $opening."\n".rtrim($node->getLiteral(), "\n")."\n".$fence;
+    }
+
+    /**
+     * Indented code blocks are normalised to fenced code — sidesteps having to recompute
+     * 4-space indentation once this block is itself nested under a list/blockquote prefix,
+     * and is unambiguously equivalent CommonMark.
+     */
+    private function renderIndentedCode(IndentedCode $node): string
+    {
+        return "```\n".rtrim($node->getLiteral(), "\n")."\n```";
+    }
+
+    private function renderList(ListBlock $list, string $indent): string
+    {
+        $data = $list->getListData();
+        $number = $data->start ?? 1;
+        $items = [];
+
+        foreach ($list->children() as $item) {
+            if (! $item instanceof ListItem) {
+                continue;
+            }
+
+            if ($data->type === ListBlock::TYPE_ORDERED) {
+                $marker = $number.($data->delimiter === ListBlock::DELIM_PAREN ? ') ' : '. ');
+                $number++;
+            } else {
+                $marker = ($data->bulletChar ?? '-').' ';
+            }
+
+            $markerIndent = str_repeat(' ', mb_strlen($marker));
+            $body = $this->renderBlocks($item->children(), $indent.$markerIndent);
+            $items[] = $this->prefixLines($body, $marker, $markerIndent);
+        }
+
+        return implode($list->isTight() ? "\n" : "\n\n", $items);
+    }
+
+    private function renderFootnote(Footnote $footnote, string $indent): string
+    {
+        $marker = '[^'.$footnote->getReference()->getLabel().']: ';
+        $markerIndent = str_repeat(' ', mb_strlen($marker));
+        $body = $this->renderBlocks($footnote->children(), $indent.$markerIndent);
+
+        return $this->prefixLines($body, $marker, $markerIndent);
+    }
+
+    private function renderTable(Table $table): string
+    {
+        $head = null;
+        $bodyRows = [];
+
+        foreach ($table->children() as $section) {
+            if (! $section instanceof TableSection) {
+                continue;
+            }
+
+            if ($section->isHead()) {
+                $head = $section;
+
+                continue;
+            }
+
+            foreach ($section->children() as $row) {
+                if ($row instanceof TableRow) {
+                    $bodyRows[] = $row;
+                }
+            }
+        }
+
+        if (! $head instanceof TableSection) {
+            return '';
+        }
+
+        $headerRow = null;
+
+        foreach ($head->children() as $row) {
+            if ($row instanceof TableRow) {
+                $headerRow = $row;
+
+                break;
+            }
+        }
+
+        if (! $headerRow instanceof TableRow) {
+            return '';
+        }
+
+        $headerCells = $this->cellsOf($headerRow);
+        $aligns = array_map(static fn (TableCell $cell): ?string => $cell->getAlign(), $headerCells);
+        $headerText = array_map($this->tableCellText(...), $headerCells);
+        $bodyText = array_map(fn (TableRow $row): array => array_map($this->tableCellText(...), $this->cellsOf($row)), $bodyRows);
+
+        $columns = count($headerCells);
+        $widths = [];
+
+        for ($i = 0; $i < $columns; $i++) {
+            $width = max(3, mb_strlen($headerText[$i] ?? ''));
+
+            foreach ($bodyText as $row) {
+                $width = max($width, mb_strlen($row[$i] ?? ''));
+            }
+
+            $widths[$i] = $width;
+        }
+
+        $lines = [$this->tableRowLine($headerText, $widths), $this->tableSeparatorLine($aligns, $widths)];
+
+        foreach ($bodyText as $row) {
+            $lines[] = $this->tableRowLine($row, $widths);
+        }
+
+        return implode("\n", $lines);
+    }
+
+    /**
+     * @return list<TableCell>
+     */
+    private function cellsOf(TableRow $row): array
+    {
+        $cells = [];
+
+        foreach ($row->children() as $cell) {
+            if ($cell instanceof TableCell) {
+                $cells[] = $cell;
+            }
+        }
+
+        return $cells;
+    }
+
+    private function tableCellText(TableCell $cell): string
+    {
+        $text = $this->collapseHardBreaks($this->inline->render($cell->children()));
+
+        return str_replace('|', '\\|', $text);
+    }
+
+    /**
+     * @param  list<string>  $cells
+     * @param  array<int, int>  $widths
+     */
+    private function tableRowLine(array $cells, array $widths): string
+    {
+        $padded = [];
+
+        foreach ($widths as $i => $width) {
+            $padded[] = $this->padTo($cells[$i] ?? '', $width);
+        }
+
+        return '| '.implode(' | ', $padded).' |';
+    }
+
+    /**
+     * @param  array<int, ?string>  $aligns
+     * @param  array<int, int>  $widths
+     */
+    private function tableSeparatorLine(array $aligns, array $widths): string
+    {
+        $segments = [];
+
+        foreach ($widths as $i => $width) {
+            $segments[] = match ($aligns[$i] ?? null) {
+                TableCell::ALIGN_LEFT => ':'.str_repeat('-', $width - 1),
+                TableCell::ALIGN_RIGHT => str_repeat('-', $width - 1).':',
+                TableCell::ALIGN_CENTER => ':'.str_repeat('-', max(1, $width - 2)).':',
+                default => str_repeat('-', $width),
+            };
+        }
+
+        return '| '.implode(' | ', $segments).' |';
+    }
+
+    private function padTo(string $text, int $width): string
+    {
+        $padding = $width - mb_strlen($text);
+
+        return $padding > 0 ? $text.str_repeat(' ', $padding) : $text;
+    }
+
+    private function collapseHardBreaks(string $text): string
+    {
+        return str_replace(InlineRenderer::HARD_BREAK, ' ', $text);
+    }
+
+    private function prefixLines(string $text, string $firstPrefix, string $contPrefix): string
+    {
+        $lines = explode("\n", $text);
+
+        foreach ($lines as $i => $line) {
+            $lines[$i] = $line === '' ? '' : ($i === 0 ? $firstPrefix : $contPrefix).$line;
+        }
+
+        return implode("\n", $lines);
+    }
+}

@@ -1,0 +1,60 @@
+# CodeRabbit configuration.
+# Docs: https://docs.coderabbit.ai/guides/configure-coderabbit
+#
+# Goals here:
+#   - Terse, signal-only reviews (chill profile, no poems).
+#   - Skip vendor / build / generated content.
+#   - Tell CodeRabbit about the project's conventions so it doesn't
+#     re-flag intentional choices on every PR.
+
+language: en-GB
+
+reviews:
+  profile: chill
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: true
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - master
+  path_filters:
+    - '!vendor/**'
+    - '!builds/**'
+    - '!composer.lock'
+  path_instructions:
+    - path: 'src/**'
+      instructions: |
+        PHP 8.4+ CommonMark tooling: fixed-width reflow (Reflow/*) and dialect
+        validation (Dialect/*), fronted by Symfony Console commands
+        (Console/Command/*) — a deliberate deviation from zefram/tetryon's
+        hand-rolled dispatcher, since cm-tools ships as a binary for direct
+        end-user CLI use rather than an internal dev-tool. CI runs
+        PHPStan level 9, Pint, and Rector — assume all three pass before
+        review. Inline @phpstan-ignore comments and PHPStan baseline entries
+        are explicitly disallowed; flag any that creep in. InlineRenderer's
+        escaping is deliberately conservative (over-escapes rather than risk
+        changing meaning) — don't suggest "minimal escaping" changes without
+        flagging the round-trip-safety tradeoff explicitly. Pre-1.0, so
+        backwards-compat breaks are acceptable when called out.
+    - path: 'tests/**'
+      instructions: |
+        PHPUnit only — no Pest. Reflow tests lean on round-trip properties
+        (wrap then unwrap recovers a canonical form) rather than asserting
+        exact output where the exact wrapping is an implementation detail.
+    - path: '.github/workflows/**'
+      instructions: |
+        tests.yml: PHP 8.4/8.5 matrix + static-analysis + actionlint + gate.
+        release.yml builds a standalone phar with a *global* Box install
+        (`tools: box` via setup-php) against a --no-dev composer install —
+        Box is deliberately NOT a composer dependency of this package (it
+        declares `replace: symfony/polyfill-php80` etc., which lets
+        Composer's solver satisfy league/commonmark's real dependency
+        *through* Box and leak it into the non-dev package set). Don't
+        suggest adding humbug/box back to require-dev.
+
+chat:
+  auto_reply: true

@@ -1,0 +1,77 @@
+{
+    "name": "vusys/cm-tools",
+    "description": "CommonMark tools: fixed-width reflow (wrap/unwrap) and dialect validation (GitHub vs JIRA Cloud markdown).",
+    "license": "MIT",
+    "type": "library",
+    "keywords": [
+        "commonmark",
+        "markdown",
+        "lint",
+        "reflow",
+        "jira",
+        "github"
+    ],
+    "authors": [
+        {
+            "name": "Bryan",
+            "email": "bryan@vuii.co.uk",
+            "role": "Maintainer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/Vusys/cm-tools/issues",
+        "source": "https://github.com/Vusys/cm-tools"
+    },
+    "require": {
+        "php": "^8.4",
+        "ext-mbstring": "*",
+        "league/commonmark": "^2.5",
+        "symfony/console": "^7.0"
+    },
+    "require-dev": {
+        "infection/extension-installer": "^0.1.2",
+        "infection/infection": "^0.34.2",
+        "larastan/larastan": "^3.0",
+        "laravel/pint": "^1.18",
+        "orchestra/testbench": "^9.0 || ^10.0 || ^11.0",
+        "phpstan/phpstan": "^2.0",
+        "phpunit/phpunit": "^12.0 || ^13.0",
+        "rector/rector": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Vusys\\CmTools\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Vusys\\CmTools\\Tests\\": "tests/"
+        }
+    },
+    "bin": [
+        "bin/cm-tools"
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "infection/extension-installer": true
+        }
+    },
+    "scripts": {
+        "analyse": "phpstan analyse",
+        "analyze": "@analyse",
+        "rector": "rector process",
+        "rector:check": "rector process --dry-run",
+        "pint": "pint",
+        "pint:check": "pint --test",
+        "check": [
+            "@pint:check",
+            "@rector:check",
+            "@analyse"
+        ],
+        "test": "phpunit",
+        "infection": "infection --threads=max"
+    }
+}
