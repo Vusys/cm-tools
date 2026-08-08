@@ -26,12 +26,12 @@ jobs:
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
-      - uses: shivammathur/setup-php@0f7f1d08e3e32076e51cae65eb0b0c871405b16 # v2.31.1
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: ${{ matrix.php }}
           coverage: ${{ matrix.coverage && 'xdebug' || 'none' }}
 
-      - uses: ramsey/composer-install@3.1.1
+      - uses: ramsey/composer-install@3cf229dc2919194e9e36783941438d17239e8520 # 3.1.1
 
       - run: composer test -- --coverage-clover=coverage.xml
         if: ${{ matrix.coverage }}
@@ -39,7 +39,7 @@ jobs:
       - run: composer test
         if: ${{ !matrix.coverage }}
 
-      - uses: codecov/codecov-action@ad3126e916f78f00edff4ed0317cf185271ccc2 # v5.4.2
+      - uses: codecov/codecov-action@ad3126e916f78f00edff4ed0317cf185271ccc2d # v5.4.2
         if: ${{ matrix.coverage }}
         with:
           files: coverage.xml
@@ -51,11 +51,11 @@ jobs:
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
-      - uses: shivammathur/setup-php@0f7f1d08e3e32076e51cae65eb0b0c871405b16 # v2.31.1
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
 
-      - uses: ramsey/composer-install@3.1.1
+      - uses: ramsey/composer-install@3cf229dc2919194e9e36783941438d17239e8520 # 3.1.1
 
       - run: composer check
 
@@ -64,7 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - uses: reviewdog/action-actionlint@f207bb54948da53c4a3fe5f65e5cd6d0f28a825e # v1.65.2
+      - uses: reviewdog/action-actionlint@a5524e1c19e62881d79c1f1b9b6f09f16356e281 # v1.65.2
         with:
           fail_level: error
 
