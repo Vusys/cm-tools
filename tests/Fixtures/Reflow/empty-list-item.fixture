@@ -1,0 +1,14 @@
+@@@ note
+An empty item keeps its marker. Dropping it deletes the item from the list. See #8.
+
+@@@ input
+- 
+- b
+
+@@@ wrap 80
+-
+- b
+
+@@@ unwrap
+-
+- b

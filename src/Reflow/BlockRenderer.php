@@ -68,7 +68,7 @@ final readonly class BlockRenderer
             $block instanceof Paragraph => $this->renderParagraph($block, $indent),
             $block instanceof Heading => $this->renderHeading($block),
             $block instanceof ThematicBreak => '---',
-            $block instanceof BlockQuote => $this->prefixLines($this->renderBlocks($block->children(), $indent.'> '), '> ', '> '),
+            $block instanceof BlockQuote => $this->prefixLines($this->renderBlocks($block->children(), $indent.'> '), '> ', '> ', '>'),
             $block instanceof FencedCode => $this->renderFencedCode($block),
             $block instanceof IndentedCode => $this->renderIndentedCode($block),
             $block instanceof HtmlBlock => rtrim($block->getLiteral()),
@@ -134,7 +134,7 @@ final readonly class BlockRenderer
 
             $markerIndent = str_repeat(' ', mb_strlen($marker));
             $body = $this->renderBlocks($item->children(), $indent.$markerIndent);
-            $items[] = $this->prefixLines($body, $marker, $markerIndent);
+            $items[] = $this->prefixLines($body, $marker, $markerIndent, '');
         }
 
         return implode($list->isTight() ? "\n" : "\n\n", $items);
@@ -146,7 +146,7 @@ final readonly class BlockRenderer
         $markerIndent = str_repeat(' ', mb_strlen($marker));
         $body = $this->renderBlocks($footnote->children(), $indent.$markerIndent);
 
-        return $this->prefixLines($body, $marker, $markerIndent);
+        return $this->prefixLines($body, $marker, $markerIndent, '');
     }
 
     private function renderTable(Table $table): string
@@ -287,12 +287,31 @@ final readonly class BlockRenderer
         return str_replace(InlineRenderer::HARD_BREAK, ' ', $text);
     }
 
-    private function prefixLines(string $text, string $firstPrefix, string $contPrefix): string
+    /**
+     * Applies a block's marker to the lines of its rendered body.
+     *
+     * Blank lines are the whole difficulty here, and the right answer differs per caller,
+     * which is why `$blankPrefix` is a parameter rather than a constant `''`: a list item or
+     * footnote continues across a genuinely empty line, but a blockquote does not — a bare
+     * blank line *terminates* a quote, so one quote holding several blocks would come back
+     * out as several sibling quotes.
+     *
+     * The first line is never blank-cased at all. It always carries the marker, because an
+     * empty list item is still an item: dropping its `- `/`1. ` deletes it from the list, and
+     * for an ordered list renumbers every item that followed it.
+     */
+    private function prefixLines(string $text, string $firstPrefix, string $contPrefix, string $blankPrefix): string
     {
         $lines = explode("\n", $text);
 
         foreach ($lines as $i => $line) {
-            $lines[$i] = $line === '' ? '' : ($i === 0 ? $firstPrefix : $contPrefix).$line;
+            if ($i === 0) {
+                $lines[$i] = $line === '' ? rtrim($firstPrefix) : $firstPrefix.$line;
+
+                continue;
+            }
+
+            $lines[$i] = $line === '' ? $blankPrefix : $contPrefix.$line;
         }
 
         return implode("\n", $lines);

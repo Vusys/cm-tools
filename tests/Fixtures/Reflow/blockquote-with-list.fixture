@@ -1,0 +1,20 @@
+@@@ note
+Same as blockquote-multiple-paragraphs, for a quote holding a list. See #5.
+
+@@@ input
+> para
+>
+> - a
+> - b
+
+@@@ wrap 80
+> para
+>
+> - a
+> - b
+
+@@@ unwrap
+> para
+>
+> - a
+> - b

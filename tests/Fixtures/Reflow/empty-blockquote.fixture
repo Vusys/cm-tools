@@ -1,0 +1,23 @@
+@@@ note
+An empty quote still renders its marker, rather than vanishing. See #5.
+
+@@@ input
+Before.
+
+>
+
+After.
+
+@@@ wrap 80
+Before.
+
+>
+
+After.
+
+@@@ unwrap
+Before.
+
+>
+
+After.

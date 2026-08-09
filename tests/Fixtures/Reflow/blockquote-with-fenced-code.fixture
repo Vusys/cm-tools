@@ -1,0 +1,23 @@
+@@@ note
+Same as blockquote-multiple-paragraphs, for a quote holding a code block. See #5.
+
+@@@ input
+> Note:
+>
+> ```php
+> $x->y();
+> ```
+
+@@@ wrap 80
+> Note:
+>
+> ```php
+> $x->y();
+> ```
+
+@@@ unwrap
+> Note:
+>
+> ```php
+> $x->y();
+> ```

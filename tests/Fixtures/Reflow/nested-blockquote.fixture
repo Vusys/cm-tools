@@ -1,0 +1,22 @@
+@@@ note
+Same as blockquote-multiple-paragraphs, for a quote holding a quote. See #5.
+
+@@@ input
+> outer quote text
+>
+> > inner quote text
+
+@@@ wrap 80
+> outer quote text
+>
+> > inner quote text
+
+@@@ wrap 20
+> outer quote text
+>
+> > inner quote text
+
+@@@ unwrap
+> outer quote text
+>
+> > inner quote text
