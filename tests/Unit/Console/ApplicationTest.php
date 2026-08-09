@@ -29,6 +29,7 @@ final class ApplicationTest extends TestCase
         $this->assertContains('unwrap', $names);
         $this->assertContains('lint', $names);
         $this->assertContains('detect', $names);
+        $this->assertContains('install-skill', $names);
     }
 
     public function test_an_unknown_command_exits_non_zero(): void

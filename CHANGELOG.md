@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased](https://github.com/Vusys/cm-tools/compare/v0.2.0...HEAD)
 
+### Added
+
+- `cm-tools install-skill` writes a [Claude Code skill](https://docs.claude.com/en/docs/claude-code/skills) teaching an AI assistant what cm-tools does and when to reach for it — into `./.claude/skills/cm-tools/SKILL.md`, or `~/.claude/skills/cm-tools/SKILL.md` with `--user`. `--print` writes it to stdout instead; an existing file is kept unless `--force` is passed. ([#4](https://github.com/Vusys/cm-tools/issues/4))
+
 ## [0.2.0](https://github.com/Vusys/cm-tools/compare/v0.1.0...v0.2.0) - 2026-08-09
 
 Five reflow correctness fixes. Each one caused `wrap`/`unwrap` to emit a document that *parsed differently* from its input — not a formatting nit but silent corruption, in most cases with no visible sign that anything had gone wrong.

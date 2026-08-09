@@ -1,6 +1,6 @@
 {
     "output": "builds/cm-tools.phar",
-    "directories": ["src", "vendor"],
+    "directories": ["src", "vendor", "resources"],
     "files": ["composer.json"],
     "compression": "GZ",
     "banner": false

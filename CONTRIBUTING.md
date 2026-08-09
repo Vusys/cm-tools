@@ -27,11 +27,13 @@ php builds/cm-tools.phar --version
 
 CI's `release.yml` does this automatically on every published GitHub release.
 
+The phar is not source-only: `install-skill` reads `resources/skill/SKILL.md` at runtime, so `box.json`'s `directories` has to keep listing `resources`. A test asserts that, because leaving it out breaks the binary and nothing else.
+
 ## Before opening a PR
 
 - `composer check` and `composer test` must pass locally.
 - If you touched `src/Reflow/*`, add a case to the fixture catalogue in [`tests/Fixtures/Reflow`](tests/Fixtures/Reflow/README.md) — it runs every case through wrap and unwrap, and additionally checks that the output is stable under a second pass and renders to the same HTML as the input, which catches far more than an exact-output assertion on its own.
-- If you touched `src/Dialect/*`, add a case to the relevant `RuleSet` test showing what it flags and what it allows.
+- If you touched `src/Dialect/*`, add a case to the relevant `RuleSet` test showing what it flags and what it allows. The dialect table in [`resources/skill/SKILL.md`](resources/skill/SKILL.md) is checked against the rule sets, so a new dialect or construct fails the suite until the skill documents it.
 
 ## Pre-1.0
 
