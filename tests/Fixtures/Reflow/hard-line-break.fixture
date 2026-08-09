@@ -1,0 +1,21 @@
+@@@ note
+A hard break must round-trip as two trailing spaces. A bare newline would re-parse as a soft
+break, silently turning an author's forced break into wrappable whitespace.
+
+@@@ input
+line one  
+line two
+
+@@@ wrap 80
+line one  
+line two
+
+@@@ wrap 5
+line
+one  
+line
+two
+
+@@@ unwrap
+line one  
+line two

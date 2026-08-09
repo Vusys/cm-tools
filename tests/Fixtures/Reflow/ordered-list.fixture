@@ -1,0 +1,17 @@
+@@@ note
+Ordered markers are re-emitted from the list's own numbering rather than copied from source.
+
+@@@ input
+1. first
+2. second
+3. third
+
+@@@ wrap 80
+1. first
+2. second
+3. third
+
+@@@ unwrap
+1. first
+2. second
+3. third

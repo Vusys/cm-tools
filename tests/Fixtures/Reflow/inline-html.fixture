@@ -1,0 +1,18 @@
+@@@ note
+An inline tag is one unbreakable atom, so a break never lands inside '<kbd>'.
+
+@@@ input
+Some <kbd>Ctrl</kbd> inline html in a sentence that is long enough to wrap around.
+
+@@@ wrap 80
+Some <kbd>Ctrl</kbd> inline html in a sentence that is long enough to wrap
+around.
+
+@@@ wrap 25
+Some <kbd>Ctrl</kbd>
+inline html in a sentence
+that is long enough to
+wrap around.
+
+@@@ unwrap
+Some <kbd>Ctrl</kbd> inline html in a sentence that is long enough to wrap around.

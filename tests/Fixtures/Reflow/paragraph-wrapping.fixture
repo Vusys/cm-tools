@@ -1,0 +1,26 @@
+@@@ note
+The base case: a paragraph is repacked greedily, and unwrap collapses it back to one line.
+
+@@@ input
+This is a fairly long sentence that should be wrapped across several lines once a narrow width is applied to it.
+
+@@@ wrap 80
+This is a fairly long sentence that should be wrapped across several lines once
+a narrow width is applied to it.
+
+@@@ wrap 30
+This is a fairly long sentence
+that should be wrapped across
+several lines once a narrow
+width is applied to it.
+
+@@@ wrap 20
+This is a fairly
+long sentence that
+should be wrapped
+across several lines
+once a narrow width
+is applied to it.
+
+@@@ unwrap
+This is a fairly long sentence that should be wrapped across several lines once a narrow width is applied to it.

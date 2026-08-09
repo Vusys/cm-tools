@@ -30,7 +30,7 @@ CI's `release.yml` does this automatically on every published GitHub release.
 ## Before opening a PR
 
 - `composer check` and `composer test` must pass locally.
-- If you touched `src/Reflow/*`, add a fixture covering the new construct — round-trip tests (wrap then unwrap recovers a canonical form) catch far more than exact-output assertions.
+- If you touched `src/Reflow/*`, add a case to the fixture catalogue in [`tests/Fixtures/Reflow`](tests/Fixtures/Reflow/README.md) — it runs every case through wrap and unwrap, and additionally checks that the output is stable under a second pass and renders to the same HTML as the input, which catches far more than an exact-output assertion on its own.
 - If you touched `src/Dialect/*`, add a case to the relevant `RuleSet` test showing what it flags and what it allows.
 
 ## Pre-1.0

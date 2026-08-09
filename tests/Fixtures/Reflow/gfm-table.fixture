@@ -1,0 +1,17 @@
+@@@ note
+Tables are rebuilt with padded columns and keep their alignment markers. Never reflowed.
+
+@@@ input
+| A | Long header |
+| --- | ---: |
+| 1 | 2 |
+
+@@@ wrap 80
+| A   | Long header |
+| --- | ----------: |
+| 1   | 2           |
+
+@@@ unwrap
+| A   | Long header |
+| --- | ----------: |
+| 1   | 2           |

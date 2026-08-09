@@ -1,0 +1,14 @@
+@@@ note
+Reference links are resolved to inline links and the definition is dropped, since the reflow
+rewrites the source anyway and the rendered document is unchanged.
+
+@@@ input
+See [the docs][docs] for more.
+
+[docs]: https://example.com/docs "Docs"
+
+@@@ wrap 80
+See [the docs](https://example.com/docs "Docs") for more.
+
+@@@ unwrap
+See [the docs](https://example.com/docs "Docs") for more.

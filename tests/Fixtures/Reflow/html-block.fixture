@@ -1,0 +1,29 @@
+@@@ note
+A raw HTML block is passed through verbatim — it has no inline structure to reflow.
+
+@@@ input
+Before.
+
+<div class="note">
+  <p>Raw HTML.</p>
+</div>
+
+After.
+
+@@@ wrap 80
+Before.
+
+<div class="note">
+  <p>Raw HTML.</p>
+</div>
+
+After.
+
+@@@ unwrap
+Before.
+
+<div class="note">
+  <p>Raw HTML.</p>
+</div>
+
+After.

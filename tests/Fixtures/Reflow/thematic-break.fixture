@@ -1,0 +1,23 @@
+@@@ note
+Thematic breaks normalise to '---'.
+
+@@@ input
+Before.
+
+---
+
+After.
+
+@@@ wrap 80
+Before.
+
+---
+
+After.
+
+@@@ unwrap
+Before.
+
+---
+
+After.

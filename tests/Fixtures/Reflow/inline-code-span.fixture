@@ -1,0 +1,18 @@
+@@@ note
+A code span is one unbreakable atom, so it stays whole even when that overshoots the width.
+
+@@@ input
+Run `composer install --no-interaction` to set things up before anything else.
+
+@@@ wrap 80
+Run `composer install --no-interaction` to set things up before anything else.
+
+@@@ wrap 20
+Run
+`composer install --no-interaction`
+to set things up
+before anything
+else.
+
+@@@ unwrap
+Run `composer install --no-interaction` to set things up before anything else.

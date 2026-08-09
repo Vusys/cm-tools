@@ -1,0 +1,30 @@
+@@@ note
+A heading is one logical line at any width — wrapping it would change where the heading ends.
+
+@@@ input
+# Title
+
+Body text.
+
+## Subtitle with quite a lot of words in it indeed
+
+@@@ wrap 80
+# Title
+
+Body text.
+
+## Subtitle with quite a lot of words in it indeed
+
+@@@ wrap 20
+# Title
+
+Body text.
+
+## Subtitle with quite a lot of words in it indeed
+
+@@@ unwrap
+# Title
+
+Body text.
+
+## Subtitle with quite a lot of words in it indeed

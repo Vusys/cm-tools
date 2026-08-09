@@ -1,0 +1,20 @@
+@@@ note
+Continuation lines of a bullet item are indented to the marker width, so they stay in the item.
+
+@@@ input
+- first item that is long enough to require wrapping across two lines
+- second
+
+@@@ wrap 80
+- first item that is long enough to require wrapping across two lines
+- second
+
+@@@ wrap 30
+- first item that is long
+  enough to require wrapping
+  across two lines
+- second
+
+@@@ unwrap
+- first item that is long enough to require wrapping across two lines
+- second

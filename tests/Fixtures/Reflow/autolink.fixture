@@ -1,0 +1,18 @@
+@@@ note
+Autolinks normalise to explicit [text](url) form — same AST node, same HTML, one spelling.
+
+@@@ input
+See <https://example.com/some/path> for details about everything here.
+
+@@@ wrap 80
+See [https://example.com/some/path](https://example.com/some/path) for details
+about everything here.
+
+@@@ wrap 20
+See
+[https://example.com/some/path](https://example.com/some/path)
+for details about
+everything here.
+
+@@@ unwrap
+See [https://example.com/some/path](https://example.com/some/path) for details about everything here.

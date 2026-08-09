@@ -13,3 +13,8 @@ indent_size = 2
 
 [*.md]
 trim_trailing_whitespace = false
+
+# Reflow fixtures encode expected output byte-for-byte, and a CommonMark hard break *is* two
+# trailing spaces — trimming them would silently rewrite what the fixture asserts.
+[*.fixture]
+trim_trailing_whitespace = false

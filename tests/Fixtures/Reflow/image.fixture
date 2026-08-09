@@ -1,0 +1,18 @@
+@@@ note
+Images keep their title, and the alt text wraps like ordinary prose.
+
+@@@ input
+An ![alt text](https://example.com/image.png "Title") inline in a sentence long enough to wrap.
+
+@@@ wrap 80
+An ![alt text](https://example.com/image.png "Title") inline in a sentence long
+enough to wrap.
+
+@@@ wrap 25
+An ![alt
+text](https://example.com/image.png "Title")
+inline in a sentence long
+enough to wrap.
+
+@@@ unwrap
+An ![alt text](https://example.com/image.png "Title") inline in a sentence long enough to wrap.

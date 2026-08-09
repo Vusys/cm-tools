@@ -1,0 +1,31 @@
+@@@ note
+An item holding two paragraphs keeps the blank line between them — that is what makes the
+list loose in the first place.
+
+@@@ input
+- first paragraph of the item
+
+  second paragraph of the item
+
+- next item
+
+@@@ wrap 80
+- first paragraph of the item
+
+  second paragraph of the item
+
+- next item
+
+@@@ wrap 30
+- first paragraph of the item
+
+  second paragraph of the item
+
+- next item
+
+@@@ unwrap
+- first paragraph of the item
+
+  second paragraph of the item
+
+- next item
