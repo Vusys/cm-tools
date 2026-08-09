@@ -1,0 +1,23 @@
+@@@ note
+A `[!NOTE]` marker alone on a blockquote's first line is GitHub's alert syntax. It has to
+keep its own line and stay unescaped even when the width would otherwise let it share a
+line with the body — merging it in turns a styled callout back into a plain quote holding
+literal `\[!NOTE\]` text. See #17.
+
+@@@ input
+> [!NOTE]
+> Some information worth calling out, long enough that it wraps across more than
+> one line on its own.
+
+@@@ wrap 80
+> [!NOTE]
+> Some information worth calling out, long enough that it wraps across more than
+> one line on its own.
+
+@@@ wrap 200
+> [!NOTE]
+> Some information worth calling out, long enough that it wraps across more than one line on its own.
+
+@@@ unwrap
+> [!NOTE]
+> Some information worth calling out, long enough that it wraps across more than one line on its own.

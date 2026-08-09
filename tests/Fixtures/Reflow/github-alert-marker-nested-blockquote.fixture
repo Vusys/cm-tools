@@ -1,0 +1,25 @@
+@@@ note
+The marker check has to walk up to the paragraph's immediate parent, not just any
+ancestor, so a nested blockquote's own alert is recognised independently of the quote
+wrapping it.
+
+@@@ input
+> Outer commentary that sits above the nested callout.
+>
+> > [!TIP]
+> > A nested alert still keeps its marker line, however deep the blockquote goes.
+
+@@@ wrap 40
+> Outer commentary that sits above the
+> nested callout.
+>
+> > [!TIP]
+> > A nested alert still keeps its
+> > marker line, however deep the
+> > blockquote goes.
+
+@@@ unwrap
+> Outer commentary that sits above the nested callout.
+>
+> > [!TIP]
+> > A nested alert still keeps its marker line, however deep the blockquote goes.

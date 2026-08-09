@@ -1,0 +1,21 @@
+@@@ note
+GitHub only recognises `[!NOTE]` as an alert when it is the blockquote's first line.
+When a paragraph precedes it, this is not an alert to begin with, so ordinary escaping
+and packing apply — same as any other bracketed text.
+
+@@@ input
+> Some intro text that is here first.
+>
+> [!NOTE]
+> This marker is not the blockquote's first line, so GitHub does not treat it as an
+> alert, and neither should this tool.
+
+@@@ wrap 200
+> Some intro text that is here first.
+>
+> \[!NOTE\] This marker is not the blockquote's first line, so GitHub does not treat it as an alert, and neither should this tool.
+
+@@@ unwrap
+> Some intro text that is here first.
+>
+> \[!NOTE\] This marker is not the blockquote's first line, so GitHub does not treat it as an alert, and neither should this tool.

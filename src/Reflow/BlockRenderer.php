@@ -91,15 +91,30 @@ final readonly class BlockRenderer
      * that will be prefixed with `- `/`> ` needs the check just as much — `- - echo` is a
      * nested list. It can push a line one column over the requested width, which is the right
      * trade against silently emitting a different document.
+     *
+     * A {@see AlertMarker::split()}-leading paragraph packs the marker as a bare line of its
+     * own, ahead of the rest — never through {@see InlineRenderer}, which would backslash-escape
+     * its brackets like any other literal `[`/`]` — so a wide enough width (or `unwrap`'s
+     * unlimited one) never fills the marker's line with body text and turns a GitHub alert
+     * callout back into a plain quote.
      */
     private function renderParagraph(Paragraph $paragraph, string $indent): string
     {
-        $text = $this->inline->render($paragraph->children());
-        $atoms = Tokenizer::tokenize($text);
         $available = $this->width === null ? null : max(1, $this->width - mb_strlen($indent));
-        $lines = array_map(LineStartEscaper::escape(...), LinePacker::pack($atoms, $available));
+        $split = AlertMarker::split($paragraph);
 
-        return implode("\n", $lines);
+        if ($split === null) {
+            $atoms = Tokenizer::tokenize($this->inline->render($paragraph->children()));
+            $lines = LinePacker::pack($atoms, $available);
+
+            return implode("\n", array_map(LineStartEscaper::escape(...), $lines));
+        }
+
+        [$marker, $rest] = $split;
+        $atoms = Tokenizer::tokenize($this->inline->render($rest));
+        $lines = $atoms === [] ? [$marker] : [$marker, ...LinePacker::pack($atoms, $available)];
+
+        return implode("\n", array_map(LineStartEscaper::escape(...), $lines));
     }
 
     private function renderHeading(Heading $heading): string

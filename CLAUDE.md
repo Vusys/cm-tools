@@ -20,6 +20,7 @@ Both features share one parser configuration (`Support\DocumentParser`) — core
 | Split rendered text into break-safe atoms (code spans, autolinks, link tails stay whole) | `src/Reflow/Tokenizer.php`                             |
 | Greedy line packing at a given width (or unlimited)                                      | `src/Reflow/LinePacker.php`                            |
 | Escape prose that a line break would turn into block markup (`-`, `#`, `1.`, `---`)      | `src/Reflow/LineStartEscaper.php`                      |
+| Detect a GitHub alert marker (`[!NOTE]` etc.) leading a blockquote's first paragraph      | `src/Reflow/AlertMarker.php`                           |
 | Walk the block tree, thread indent width through nested blockquotes/lists                | `src/Reflow/BlockRenderer.php`                         |
 | Public `wrap`/`unwrap` entry points                                                      | `src/Reflow/Wrapper.php`, `src/Reflow/Unwrapper.php`   |
 | Declarative "what this dialect doesn't support"                                          | `src/Dialect/RuleSet.php`, `src/Dialect/RuleSet/*.php` |

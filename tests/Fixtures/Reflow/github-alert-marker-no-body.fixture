@@ -1,0 +1,12 @@
+@@@ note
+A marker with no body at all — the whole paragraph is just `[!WARNING]` — is still a
+marker to keep unescaped. An empty callout is unusual, not invalid.
+
+@@@ input
+> [!WARNING]
+
+@@@ wrap 80
+> [!WARNING]
+
+@@@ unwrap
+> [!WARNING]
