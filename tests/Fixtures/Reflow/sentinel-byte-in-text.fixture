@@ -1,0 +1,18 @@
+@@@ note
+A literal U+0001 in the source must not be read as the in-band hard-break marker and turned
+into a real hard break. The byte below is a real U+0001 — it will look like nothing, or like
+a control picture, depending on your editor. See #9.
+
+@@@ input
+before  after
+
+@@@ wrap 80
+before after
+
+@@@ unwrap
+before after
+
+@@@ html-drift
+The sentinel byte is dropped rather than preserved, so the rendered output loses it. That is
+the intended trade: U+0001 carries no meaning in CommonMark, and keeping it would leave the
+in-band hard-break marker ambiguous.

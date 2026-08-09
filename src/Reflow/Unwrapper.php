@@ -17,7 +17,7 @@ final class Unwrapper
 {
     public function unwrap(string $markdown): string
     {
-        $document = DocumentParser::parse($markdown);
+        $document = DocumentParser::parse(InlineRenderer::withoutSentinels($markdown));
 
         return new BlockRenderer(null)->render($document);
     }

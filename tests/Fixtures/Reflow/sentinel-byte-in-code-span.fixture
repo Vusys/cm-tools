@@ -1,0 +1,18 @@
+@@@ note
+As sentinel-byte-in-text, but arriving through a code span rather than plain text — the byte
+reaches the rendered string through several node types, which is why it is removed from the
+input at the door rather than sanitised per literal on the way out. See #9.
+
+@@@ input
+a `xy` b
+
+@@@ wrap 80
+a `xy` b
+
+@@@ unwrap
+a `xy` b
+
+@@@ html-drift
+The sentinel byte is dropped rather than preserved, so the rendered output loses it. That is
+the intended trade: U+0001 carries no meaning in CommonMark, and keeping it would leave the
+in-band hard-break marker ambiguous.
