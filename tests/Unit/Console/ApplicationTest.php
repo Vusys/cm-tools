@@ -18,7 +18,7 @@ final class ApplicationTest extends TestCase
         $exit = $tester->run(['--version' => true]);
 
         $this->assertSame(0, $exit);
-        $this->assertStringContainsString('0.1.0', $tester->getDisplay());
+        $this->assertStringContainsString(Application::VERSION, $tester->getDisplay());
     }
 
     public function test_it_registers_every_command(): void
