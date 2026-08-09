@@ -1,0 +1,28 @@
+@@@ note
+A tight item holding a sublist must not gain a blank line before it — that promotes the whole
+list to loose, and looseness is a property of the entire list, so every sibling's content
+gains a <p> wrapper too. See #7.
+
+@@@ input
+- outer
+  - inner one
+  - inner two
+- sibling
+
+@@@ wrap 80
+- outer
+  - inner one
+  - inner two
+- sibling
+
+@@@ wrap 20
+- outer
+  - inner one
+  - inner two
+- sibling
+
+@@@ unwrap
+- outer
+  - inner one
+  - inner two
+- sibling
