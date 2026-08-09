@@ -6,6 +6,7 @@ namespace Vusys\CmTools\Console;
 
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Vusys\CmTools\Console\Command\DetectCommand;
+use Vusys\CmTools\Console\Command\InstallSkillCommand;
 use Vusys\CmTools\Console\Command\LintCommand;
 use Vusys\CmTools\Console\Command\UnwrapCommand;
 use Vusys\CmTools\Console\Command\WrapCommand;
@@ -23,6 +24,7 @@ final class Application extends SymfonyApplication
             new UnwrapCommand,
             new LintCommand,
             new DetectCommand,
+            new InstallSkillCommand,
         ]);
     }
 }

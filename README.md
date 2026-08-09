@@ -41,8 +41,8 @@ cm-tools lint notes.md --dialect=github     # the default
 cm-tools detect notes.md
 ```
 
-All four commands read from stdin and write to stdout when no file/`--output` is given, so
-they compose:
+All four document commands read from stdin and write to stdout when no file/`--output` is
+given, so they compose:
 
 ```bash
 cm-tools wrap --width=72 < draft.md | cm-tools lint --dialect=jira-cloud -
@@ -57,6 +57,21 @@ Run `cm-tools <command> --help` for the full option list.
 | `commonmark` | The base CommonMark spec — no GFM extensions, no footnotes. Renders identically anywhere CommonMark is supported. |
 | `github` | GitHub Flavored Markdown as rendered on github.com — tables, strikethrough, task lists, autolinks, footnotes. Flags the small set of raw-HTML tags GitHub strips/escapes. |
 | `jira-cloud` | The constrained Markdown-shortcut syntax JIRA Cloud's editor accepts in descriptions/comments — not classic JIRA wiki markup. Best-effort baseline; expect it to grow as real documents surface gaps. |
+
+## Using cm-tools with Claude Code
+
+An assistant only reaches for a tool it knows exists. `install-skill` writes a
+[skill](https://docs.claude.com/en/docs/claude-code/skills) describing what cm-tools does and
+when to use it, so it doesn't have to be explained again every session:
+
+```bash
+cm-tools install-skill           # ./.claude/skills/cm-tools/SKILL.md, for this project
+cm-tools install-skill --user    # ~/.claude/skills/cm-tools/SKILL.md, for every project
+cm-tools install-skill --print   # write it to stdout and touch nothing on disk
+```
+
+Parent directories are created as needed, and the resolved path is printed so you can see which
+scope won. An existing `SKILL.md` is left alone unless you pass `--force`.
 
 ## Development
 

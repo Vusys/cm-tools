@@ -25,7 +25,9 @@ Both features share one parser configuration (`Support\DocumentParser`) — core
 | Declarative "what this dialect doesn't support"                                          | `src/Dialect/RuleSet.php`, `src/Dialect/RuleSet/*.php` |
 | AST walk that checks node types against a rule set                                       | `src/Dialect/Validator.php`                            |
 | `--dialect=` name → `RuleSet` lookup                                                     | `src/Dialect/RuleSetRegistry.php`                      |
-| `wrap`/`unwrap`/`lint`/`detect` commands                                                 | `src/Console/Command/*.php`                            |
+| `wrap`/`unwrap`/`lint`/`detect`/`install-skill` commands                                 | `src/Console/Command/*.php`                            |
+| Claude Code skill written by `install-skill`                                             | `resources/skill/SKILL.md`                             |
+| Locating that asset, in-repo and inside the phar                                         | `src/Support/SkillAsset.php`                           |
 | Reflow test catalogue — input plus expected wrap/unwrap output, one file per case        | `tests/Fixtures/Reflow/` (see its README)              |
 | `mixed` → typed input without `@var` overrides (see below)                               | `src/Console/TypedInput.php`                           |
 
@@ -41,11 +43,17 @@ Every `RuleSet` is pure data: `unsupportedConstructs()` returns a subset of `Val
 
 ## Console layer
 
-Symfony Console (`src/Console/Command/*.php`), **not** the hand-rolled dispatcher zefram/tetryon use — cm-tools ships as a binary for direct end-user CLI use, where per-command `--help`, option validation, and colorized output earn their keep in a way they don't for an internal 2-command dev tool. `TypedInput` (`stringArgument`/`stringOption`/ `intOption`) exists because `InputInterface::getArgument()`/`getOption()` return `mixed` — narrow with a real `is_string`/`is_numeric` check, not a `@var` override or `assert()`, so PHPStan traces the actual control flow.
+Symfony Console (`src/Console/Command/*.php`), **not** the hand-rolled dispatcher zefram/tetryon use — cm-tools ships as a binary for direct end-user CLI use, where per-command `--help`, option validation, and colorized output earn their keep in a way they don't for an internal 2-command dev tool. `TypedInput` (`stringArgument`/`stringOption`/ `intOption`/`boolOption`) exists because `InputInterface::getArgument()`/`getOption()` return `mixed` — narrow with a real `is_string`/`is_numeric` check, not a `@var` override or `assert()`, so PHPStan traces the actual control flow.
 
 ## The binary
 
 `box.json` builds a single `.phar` via [Box](https://github.com/box-project/box). Box is **not** a Composer dependency of this package — see `release.yml`'s comment and `.coderabbit.yaml` for why (it `replace`s `symfony/polyfill-php80` etc., which lets Composer's solver satisfy `league/commonmark`'s real dependency *through* Box and leak it into the non-dev package set if Box is required at all). Install it globally (`composer global require humbug/box`) instead.
+
+The phar is no longer source-only: `install-skill` reads `resources/skill/SKILL.md` at runtime, so `box.json`'s `directories` has to list `resources` — a test asserts it does, because omitting it breaks only the built binary and nothing catches that in-repo. `SkillAsset::path()` builds the path with `dirname(__DIR__, 2)` rather than a `..` suffix so it resolves under the `phar://` stream wrapper too.
+
+## The shipped skill
+
+`resources/skill/SKILL.md` is the Claude Code skill `install-skill` writes out — a real Markdown file, not a heredoc, so it diffs and reviews as prose. Its content is otherwise unchecked, with two exceptions `tests/Unit/Support/SkillAssetTest.php` enforces: the frontmatter must parse with a `name` matching the install directory, and the dialect table must agree cell-for-cell with what `RuleSetRegistry` and each `RuleSet` declare. That second check is the whole reason the table can stay in the asset instead of being rendered from the registry at write time — a new dialect or construct fails the suite rather than silently leaving the skill stale.
 
 ## Running the suites
 
