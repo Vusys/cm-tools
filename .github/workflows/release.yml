@@ -41,6 +41,10 @@ jobs:
           ./cm-tools --version
           printf 'alpha *beta* gamma delta\n' | ./cm-tools wrap --width=20
           printf 'plain text\n' | ./cm-tools lint --dialect=jira-cloud
+          # install-skill is the one command that reads a non-PHP file out of
+          # the phar, so it is the one a source-only box.json would break.
+          mkdir smoke && (cd smoke && ../cm-tools install-skill)
+          test -f smoke/.claude/skills/cm-tools/SKILL.md
 
       - name: Attach the phar to the release
         if: github.event_name == 'release'
