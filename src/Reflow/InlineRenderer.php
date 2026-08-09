@@ -40,6 +40,26 @@ final class InlineRenderer
     private const array ESCAPE_CHARS = ['\\', '`', '*', '_', '~', '[', ']', '<', '>'];
 
     /**
+     * Drops the sentinel byte from source markdown.
+     *
+     * {@see self::HARD_BREAK} is an in-band marker inside the rendered inline string, so a
+     * literal U+0001 in the source is indistinguishable from a real hard break and gets
+     * turned into one. Removing it at the door makes the marker unambiguous by construction,
+     * which is a stronger guarantee than sanitising each source-derived literal on the way
+     * out: the byte can arrive through text, code spans, raw HTML, a link URL or a link
+     * title, and any call site missed there reintroduces the collision silently.
+     *
+     * U+0001 carries no meaning in CommonMark, so dropping it costs nothing real. Note the
+     * document is the *only* thing this makes lossy — it is not a round-trip guarantee for
+     * arbitrary bytes, and the fixture that covers it is marked as intentionally altering the
+     * rendered output for that reason.
+     */
+    public static function withoutSentinels(string $markdown): string
+    {
+        return str_replace(self::HARD_BREAK, '', $markdown);
+    }
+
+    /**
      * @param  iterable<Node>  $children
      */
     public function render(iterable $children): string

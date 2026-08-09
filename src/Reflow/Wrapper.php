@@ -16,7 +16,7 @@ final class Wrapper
 {
     public function wrap(string $markdown, int $width): string
     {
-        $document = DocumentParser::parse($markdown);
+        $document = DocumentParser::parse(InlineRenderer::withoutSentinels($markdown));
 
         return new BlockRenderer($width)->render($document);
     }
