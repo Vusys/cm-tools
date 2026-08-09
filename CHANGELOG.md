@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased](https://github.com/Vusys/cm-tools/compare/v0.3.0...HEAD)
 
+### Fixed
+
+- A GitHub alert marker (`> [!NOTE]`, `[!TIP]`, `[!IMPORTANT]`, `[!WARNING]`, `[!CAUTION]`) alone on a blockquote's first line keeps its own line and stays unescaped, regardless of wrap width. Previously a wide enough width — including `unwrap`'s unlimited one — could merge it into the following body text and backslash-escape its brackets, turning a styled callout back into a plain quote containing literal `\[!NOTE\]` text. ([#17](https://github.com/Vusys/cm-tools/issues/17))
+
 ## [0.3.0](https://github.com/Vusys/cm-tools/compare/v0.2.0...v0.3.0) - 2026-08-09
 
 ### Added

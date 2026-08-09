@@ -1,0 +1,14 @@
+@@@ note
+`[!NOTE]`-shaped text outside a blockquote entirely is just prose that happens to contain
+brackets. It gets ordinary bracket escaping, same as it did before this marker handling
+existed.
+
+@@@ input
+Regular prose that happens to mention [!NOTE] mid-sentence is not a blockquote at all,
+so the brackets are escaped as ordinary text like any other literal bracket pair.
+
+@@@ wrap 200
+Regular prose that happens to mention \[!NOTE\] mid-sentence is not a blockquote at all, so the brackets are escaped as ordinary text like any other literal bracket pair.
+
+@@@ unwrap
+Regular prose that happens to mention \[!NOTE\] mid-sentence is not a blockquote at all, so the brackets are escaped as ordinary text like any other literal bracket pair.
