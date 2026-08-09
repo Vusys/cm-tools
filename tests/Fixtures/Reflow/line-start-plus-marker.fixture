@@ -1,0 +1,19 @@
+@@@ note
+Wrapping must not push block markup to the start of a line. The same text is safe or
+corrupt purely as a function of --width, which is what makes this easy to miss: a document
+can round-trip cleanly at 80 and turn a paragraph into a list at 13. See #6.
+
+@@@ input
+alpha bravo charlie delta + echo foxtrot golf.
+
+@@@ wrap 80
+alpha bravo charlie delta + echo foxtrot golf.
+
+@@@ wrap 13
+alpha bravo
+charlie delta
+\+ echo
+foxtrot golf.
+
+@@@ unwrap
+alpha bravo charlie delta + echo foxtrot golf.

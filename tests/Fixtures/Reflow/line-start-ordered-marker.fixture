@@ -1,0 +1,18 @@
+@@@ note
+As line-start-bullet-marker. The digits can't be escaped — a backslash only escapes ASCII
+punctuation — so the delimiter is. See #6.
+
+@@@ input
+alpha bravo charlie delta 1. echo foxtrot golf.
+
+@@@ wrap 80
+alpha bravo charlie delta 1. echo foxtrot golf.
+
+@@@ wrap 14
+alpha bravo
+charlie delta
+1\. echo
+foxtrot golf.
+
+@@@ unwrap
+alpha bravo charlie delta 1. echo foxtrot golf.

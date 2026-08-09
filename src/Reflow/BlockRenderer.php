@@ -85,13 +85,21 @@ final readonly class BlockRenderer
         };
     }
 
+    /**
+     * Escaping happens after packing, and against the *unprefixed* line, which is the correct
+     * position twice over: only then is it known which atom actually landed first, and a line
+     * that will be prefixed with `- `/`> ` needs the check just as much — `- - echo` is a
+     * nested list. It can push a line one column over the requested width, which is the right
+     * trade against silently emitting a different document.
+     */
     private function renderParagraph(Paragraph $paragraph, string $indent): string
     {
         $text = $this->inline->render($paragraph->children());
         $atoms = Tokenizer::tokenize($text);
         $available = $this->width === null ? null : max(1, $this->width - mb_strlen($indent));
+        $lines = array_map(LineStartEscaper::escape(...), LinePacker::pack($atoms, $available));
 
-        return implode("\n", LinePacker::pack($atoms, $available));
+        return implode("\n", $lines);
     }
 
     private function renderHeading(Heading $heading): string

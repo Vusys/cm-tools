@@ -1,0 +1,17 @@
+@@@ note
+As line-start-marker-in-list-item, inside a blockquote. See #6.
+
+@@@ input
+> alpha bravo charlie delta - echo foxtrot golf.
+
+@@@ wrap 80
+> alpha bravo charlie delta - echo foxtrot golf.
+
+@@@ wrap 15
+> alpha bravo
+> charlie delta
+> \- echo
+> foxtrot golf.
+
+@@@ unwrap
+> alpha bravo charlie delta - echo foxtrot golf.
