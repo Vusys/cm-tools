@@ -3,6 +3,9 @@ name: Release
 on:
   release:
     types: [published]
+  # Dry run: build and smoke-test the phar without publishing anything, so the
+  # release path can be exercised before a tag depends on it.
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -30,6 +33,27 @@ jobs:
           cp builds/cm-tools.phar cm-tools
           chmod +x cm-tools
 
-      - uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # v3.0.2
+      # Guards against shipping a phar that builds but can't run — a broken stub
+      # or a file missing from box.json only shows up when it's executed.
+      - name: Smoke-test the phar
+        run: |
+          set -euo pipefail
+          ./cm-tools --version
+          printf 'alpha *beta* gamma delta\n' | ./cm-tools wrap --width=20
+          printf 'plain text\n' | ./cm-tools lint --dialect=jira-cloud
+
+      - name: Attach the phar to the release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # v3.0.2
         with:
           files: cm-tools
+
+      # A workflow_dispatch run has no release to attach to, so keep the phar as
+      # a downloadable artifact instead.
+      - name: Upload the phar as a build artifact
+        if: github.event_name != 'release'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: cm-tools-phar
+          path: cm-tools
+          if-no-files-found: error
