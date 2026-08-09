@@ -45,9 +45,15 @@ final readonly class BlockRenderer
     }
 
     /**
+     * Blocks are normally separated by a blank line. `$separator` exists for the one context
+     * where that is wrong: inside a *tight* list item, where a blank line between the item's
+     * paragraph and its nested sublist would promote the whole list to loose — and looseness
+     * is a property of the entire list, so a single nested item re-wraps every sibling's
+     * content in a `<p>`.
+     *
      * @param  iterable<Node>  $blocks
      */
-    private function renderBlocks(iterable $blocks, string $indent): string
+    private function renderBlocks(iterable $blocks, string $indent, string $separator = "\n\n"): string
     {
         $rendered = [];
 
@@ -59,7 +65,7 @@ final readonly class BlockRenderer
             }
         }
 
-        return implode("\n\n", $rendered);
+        return implode($separator, $rendered);
     }
 
     private function renderBlock(Node $block, string $indent): string
@@ -120,6 +126,10 @@ final readonly class BlockRenderer
         $number = $data->start ?? 1;
         $items = [];
 
+        // One separator governs both joins: between an item's own blocks, and between items.
+        // They are the same decision — a blank line anywhere inside a list makes it loose.
+        $separator = $list->isTight() ? "\n" : "\n\n";
+
         foreach ($list->children() as $item) {
             if (! $item instanceof ListItem) {
                 continue;
@@ -133,11 +143,11 @@ final readonly class BlockRenderer
             }
 
             $markerIndent = str_repeat(' ', mb_strlen($marker));
-            $body = $this->renderBlocks($item->children(), $indent.$markerIndent);
+            $body = $this->renderBlocks($item->children(), $indent.$markerIndent, $separator);
             $items[] = $this->prefixLines($body, $marker, $markerIndent, '');
         }
 
-        return implode($list->isTight() ? "\n" : "\n\n", $items);
+        return implode($separator, $items);
     }
 
     private function renderFootnote(Footnote $footnote, string $indent): string

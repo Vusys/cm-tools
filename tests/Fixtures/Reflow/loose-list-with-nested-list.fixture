@@ -1,0 +1,23 @@
+@@@ note
+A genuinely loose list keeps its blank lines even where the nested sublist is tight — the
+tight/loose decision is made per list, not inherited. See #7.
+
+@@@ input
+- a
+  - b
+
+- c
+
+@@@ wrap 80
+- a
+
+  - b
+
+- c
+
+@@@ unwrap
+- a
+
+  - b
+
+- c

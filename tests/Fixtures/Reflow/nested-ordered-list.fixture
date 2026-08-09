@@ -1,0 +1,17 @@
+@@@ note
+As nested-list, for ordered lists. See #7.
+
+@@@ input
+1. a
+   1. b
+2. c
+
+@@@ wrap 80
+1. a
+   1. b
+2. c
+
+@@@ unwrap
+1. a
+   1. b
+2. c

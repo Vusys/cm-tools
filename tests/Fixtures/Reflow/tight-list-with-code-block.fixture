@@ -1,0 +1,23 @@
+@@@ note
+A tight item holding a fenced code block also stays tight. See #7.
+
+@@@ input
+- a
+  ```
+  x
+  ```
+- b
+
+@@@ wrap 80
+- a
+  ```
+  x
+  ```
+- b
+
+@@@ unwrap
+- a
+  ```
+  x
+  ```
+- b
