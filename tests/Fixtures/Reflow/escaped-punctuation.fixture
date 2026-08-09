@@ -1,0 +1,11 @@
+@@@ note
+Text that was escaped in the source stays escaped, rather than being unescaped into markup.
+
+@@@ input
+A literal asterisk \* and underscore \_ and backtick \` in prose.
+
+@@@ wrap 80
+A literal asterisk \* and underscore \_ and backtick \` in prose.
+
+@@@ unwrap
+A literal asterisk \* and underscore \_ and backtick \` in prose.

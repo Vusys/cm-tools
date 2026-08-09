@@ -1,0 +1,25 @@
+@@@ note
+A footnote body hangs under its '[^label]: ' marker, indented to the marker width.
+
+@@@ input
+Some claim.[^note]
+
+[^note]: The supporting detail, written out at enough length that it wraps.
+
+@@@ wrap 80
+Some claim.[^note]
+
+[^note]: The supporting detail, written out at enough length that it wraps.
+
+@@@ wrap 30
+Some claim.[^note]
+
+[^note]: The supporting
+         detail, written out
+         at enough length that
+         it wraps.
+
+@@@ unwrap
+Some claim.[^note]
+
+[^note]: The supporting detail, written out at enough length that it wraps.

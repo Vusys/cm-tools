@@ -1,0 +1,18 @@
+@@@ note
+Setext headings normalise to ATX. Same document, one spelling.
+
+@@@ input
+Title
+=====
+
+Body.
+
+@@@ wrap 80
+# Title
+
+Body.
+
+@@@ unwrap
+# Title
+
+Body.

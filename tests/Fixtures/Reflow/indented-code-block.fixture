@@ -1,0 +1,28 @@
+@@@ note
+Indented code normalises to fenced code: equivalent CommonMark, and it sidesteps recomputing
+4-space indentation once the block sits under a list or blockquote prefix.
+
+@@@ input
+Before.
+
+    indented code here
+
+After.
+
+@@@ wrap 80
+Before.
+
+```
+indented code here
+```
+
+After.
+
+@@@ unwrap
+Before.
+
+```
+indented code here
+```
+
+After.

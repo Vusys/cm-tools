@@ -1,0 +1,14 @@
+@@@ note
+Task list markers survive as literal '[x]'/'[ ]' rather than being escaped as link text.
+
+@@@ input
+- [x] done thing
+- [ ] pending thing
+
+@@@ wrap 80
+- [x] done thing
+- [ ] pending thing
+
+@@@ unwrap
+- [x] done thing
+- [ ] pending thing

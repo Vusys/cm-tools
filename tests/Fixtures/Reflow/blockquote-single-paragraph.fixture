@@ -1,0 +1,18 @@
+@@@ note
+Every line of a wrapped quote carries the '> ' marker, and the quote wraps narrower to make
+room for it.
+
+@@@ input
+> quoted text that is long enough that it needs to wrap across more than one line
+
+@@@ wrap 80
+> quoted text that is long enough that it needs to wrap across more than one
+> line
+
+@@@ wrap 30
+> quoted text that is long
+> enough that it needs to wrap
+> across more than one line
+
+@@@ unwrap
+> quoted text that is long enough that it needs to wrap across more than one line

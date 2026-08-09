@@ -1,0 +1,20 @@
+@@@ note
+Inline markup is re-serialised with its delimiters glued to its content. A link's '](url)'
+tail is unbreakable, so the 30-column case overshoots rather than splitting the URL.
+
+@@@ input
+This is a paragraph with **bold**, *italic*, ~~struck~~ and a [link](https://example.com "Example") in it, long enough to wrap.
+
+@@@ wrap 80
+This is a paragraph with **bold**, *italic*, ~~struck~~ and a
+[link](https://example.com "Example") in it, long enough to wrap.
+
+@@@ wrap 30
+This is a paragraph with
+**bold**, *italic*, ~~struck~~
+and a
+[link](https://example.com "Example")
+in it, long enough to wrap.
+
+@@@ unwrap
+This is a paragraph with **bold**, *italic*, ~~struck~~ and a [link](https://example.com "Example") in it, long enough to wrap.

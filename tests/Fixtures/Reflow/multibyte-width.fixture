@@ -1,0 +1,13 @@
+@@@ note
+Width is counted in characters, not bytes: accented letters and emoji each cost one column.
+
+@@@ input
+Naïve café façade emoji 🎉 text that should still wrap at the right column count.
+
+@@@ wrap 30
+Naïve café façade emoji 🎉 text
+that should still wrap at the
+right column count.
+
+@@@ unwrap
+Naïve café façade emoji 🎉 text that should still wrap at the right column count.

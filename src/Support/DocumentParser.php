@@ -21,6 +21,8 @@ use Vusys\CmTools\Dialect\Validator;
  */
 final class DocumentParser
 {
+    private static ?Environment $environment = null;
+
     private static ?MarkdownParser $parser = null;
 
     public static function parse(string $markdown): Document
@@ -28,15 +30,30 @@ final class DocumentParser
         return self::parser()->parse($markdown);
     }
 
-    private static function parser(): MarkdownParser
+    /**
+     * The same configuration {@see self::parse()} uses, exposed so a caller that needs a
+     * *renderer* rather than a parser (the fixture suite renders both sides of a reflow to
+     * HTML to prove the meaning didn't change) is guaranteed to see the identical extension
+     * set, instead of assembling a near-copy that can drift.
+     */
+    public static function environment(): Environment
     {
-        if (! self::$parser instanceof MarkdownParser) {
+        if (! self::$environment instanceof Environment) {
             $environment = new Environment;
             $environment->addExtension(new CommonMarkCoreExtension);
             $environment->addExtension(new GithubFlavoredMarkdownExtension);
             $environment->addExtension(new FootnoteExtension);
 
-            self::$parser = new MarkdownParser($environment);
+            self::$environment = $environment;
+        }
+
+        return self::$environment;
+    }
+
+    private static function parser(): MarkdownParser
+    {
+        if (! self::$parser instanceof MarkdownParser) {
+            self::$parser = new MarkdownParser(self::environment());
         }
 
         return self::$parser;

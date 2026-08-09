@@ -1,0 +1,17 @@
+@@@ note
+A genuinely loose list keeps its blank lines — looseness is a property the source declared.
+
+@@@ input
+- a
+
+- b
+
+@@@ wrap 80
+- a
+
+- b
+
+@@@ unwrap
+- a
+
+- b

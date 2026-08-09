@@ -1,0 +1,42 @@
+@@@ note
+Fenced code is structural, not prose: its content is never reflowed at any width.
+
+@@@ input
+Before.
+
+```php
+<?php
+$x = 'a string with more than twenty characters in it';
+```
+
+After.
+
+@@@ wrap 80
+Before.
+
+```php
+<?php
+$x = 'a string with more than twenty characters in it';
+```
+
+After.
+
+@@@ wrap 20
+Before.
+
+```php
+<?php
+$x = 'a string with more than twenty characters in it';
+```
+
+After.
+
+@@@ unwrap
+Before.
+
+```php
+<?php
+$x = 'a string with more than twenty characters in it';
+```
+
+After.
