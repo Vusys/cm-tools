@@ -8,6 +8,11 @@ All notable changes to this project will be documented in this file. The format 
 
 - `DocumentParser::environment()` exposes the shared CommonMark environment, so callers that need a renderer rather than a parser get the identical extension set instead of assembling a copy that can drift.
 
+### Fixed
+
+- A blank line inside a blockquote keeps its `>` marker. Previously it was emitted bare, which ends a quote — so a single quote containing several paragraphs (or a code block, list, or nested quote) came back out as several separate quotes. ([#5](https://github.com/Vusys/cm-tools/issues/5))
+- An empty list item keeps its marker instead of being dropped. Previously the item disappeared, leaving a stray blank line, and an ordered list renumbered around the gap so the surviving items silently changed number. ([#8](https://github.com/Vusys/cm-tools/issues/8))
+
 ## [0.1.0](https://github.com/Vusys/cm-tools/releases/tag/v0.1.0) - 2026-08-09
 
 ### Added

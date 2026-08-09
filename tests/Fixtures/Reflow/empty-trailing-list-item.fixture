@@ -1,0 +1,15 @@
+@@@ note
+A bare '-' as the last item must not read as a setext underline for the item before it.
+See #8.
+
+@@@ input
+- a
+- 
+
+@@@ wrap 80
+- a
+-
+
+@@@ unwrap
+- a
+-

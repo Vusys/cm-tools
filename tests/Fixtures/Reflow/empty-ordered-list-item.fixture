@@ -1,0 +1,15 @@
+@@@ note
+As empty-list-item, and worse for an ordered list: dropping the first item made the output
+start at 2, silently renumbering every item that survived. See #8.
+
+@@@ input
+1. 
+2. b
+
+@@@ wrap 80
+1.
+2. b
+
+@@@ unwrap
+1.
+2. b

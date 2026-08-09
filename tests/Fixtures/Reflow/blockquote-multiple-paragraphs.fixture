@@ -1,0 +1,23 @@
+@@@ note
+A blank line inside a quote keeps its '>' marker. Emitting a bare blank line would end the
+quote, turning one multi-block quote into several sibling quotes. See #5.
+
+@@@ input
+> First paragraph.
+>
+> Second paragraph.
+
+@@@ wrap 80
+> First paragraph.
+>
+> Second paragraph.
+
+@@@ wrap 20
+> First paragraph.
+>
+> Second paragraph.
+
+@@@ unwrap
+> First paragraph.
+>
+> Second paragraph.
