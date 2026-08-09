@@ -1,0 +1,18 @@
+@@@ note
+The check runs against the unprefixed line, so it still fires inside a list item — where an
+unescaped dash would open a *nested* list rather than a sibling one. See #6.
+
+@@@ input
+- alpha bravo charlie delta - echo foxtrot golf.
+
+@@@ wrap 80
+- alpha bravo charlie delta - echo foxtrot golf.
+
+@@@ wrap 15
+- alpha bravo
+  charlie delta
+  \- echo
+  foxtrot golf.
+
+@@@ unwrap
+- alpha bravo charlie delta - echo foxtrot golf.

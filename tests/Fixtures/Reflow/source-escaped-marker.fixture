@@ -1,0 +1,19 @@
+@@@ note
+A marker the author escaped in the source stays escaped. This one corrupts at every width,
+not just narrow ones: the parse drops the backslash, and re-emitting the bare text turned
+prose into a list. Same root cause as #6.
+
+@@@ input
+\- not a list, just prose
+
+1\. nor is this
+
+@@@ wrap 80
+\- not a list, just prose
+
+1\. nor is this
+
+@@@ unwrap
+\- not a list, just prose
+
+1\. nor is this

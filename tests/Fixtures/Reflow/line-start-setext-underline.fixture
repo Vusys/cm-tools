@@ -1,0 +1,22 @@
+@@@ note
+The worst case: a '---' line is a setext underline, which reaches *backwards* and turns the
+line above it into a heading — so the corruption lands on text that was already emitted and
+looked safe. It is also a thematic break. See #6.
+
+@@@ input
+alpha bravo charlie --- delta echo foxtrot.
+
+@@@ wrap 80
+alpha bravo charlie --- delta echo foxtrot.
+
+@@@ wrap 6
+alpha
+bravo
+charlie
+\---
+delta
+echo
+foxtrot.
+
+@@@ unwrap
+alpha bravo charlie --- delta echo foxtrot.

@@ -1,0 +1,17 @@
+@@@ note
+As line-start-ordered-marker, for the ')' delimiter. See #6.
+
+@@@ input
+alpha bravo charlie delta 1) echo foxtrot golf.
+
+@@@ wrap 80
+alpha bravo charlie delta 1) echo foxtrot golf.
+
+@@@ wrap 14
+alpha bravo
+charlie delta
+1\) echo
+foxtrot golf.
+
+@@@ unwrap
+alpha bravo charlie delta 1) echo foxtrot golf.
