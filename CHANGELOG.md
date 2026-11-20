@@ -2,11 +2,13 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
-## [Unreleased](https://github.com/Vusys/cm-tools/compare/v0.3.0...HEAD)
+## [Unreleased](https://github.com/Vusys/cm-tools/compare/v0.3.1...HEAD)
+
+## [0.3.1](https://github.com/Vusys/cm-tools/compare/v0.3.0...v0.3.1) - 2026-11-20
 
 ### Security
 
-- Require `league/commonmark` 2.10.2 or later (was `^2.5`). Earlier versions are affected by published advisories, including [GHSA-97jj-33gv-5xf9](https://github.com/advisories/GHSA-97jj-33gv-5xf9) and [GHSA-3q6v-r5mr-hxv8](https://github.com/advisories/GHSA-3q6v-r5mr-hxv8). The 0.3.0 binary was built against an affected version; the next release binary bundles a patched one.
+- Require `league/commonmark` 2.10.2 or later (was `^2.5`). Earlier versions are affected by published advisories, including [GHSA-97jj-33gv-5xf9](https://github.com/advisories/GHSA-97jj-33gv-5xf9) and [GHSA-3q6v-r5mr-hxv8](https://github.com/advisories/GHSA-3q6v-r5mr-hxv8). The 0.3.0 binary was built against an affected version; this release's binary bundles a patched one.
 
 ### Fixed
 
