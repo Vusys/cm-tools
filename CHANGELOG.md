@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased](https://github.com/Vusys/cm-tools/compare/v0.3.0...HEAD)
 
+### Security
+
+- Require `league/commonmark` 2.10.2 or later (was `^2.5`). Earlier versions are affected by published advisories, including [GHSA-97jj-33gv-5xf9](https://github.com/advisories/GHSA-97jj-33gv-5xf9) and [GHSA-3q6v-r5mr-hxv8](https://github.com/advisories/GHSA-3q6v-r5mr-hxv8). The 0.3.0 binary was built against an affected version; the next release binary bundles a patched one.
+
 ### Fixed
 
 - A GitHub alert marker (`> [!NOTE]`, `[!TIP]`, `[!IMPORTANT]`, `[!WARNING]`, `[!CAUTION]`) alone on a blockquote's first line keeps its own line and stays unescaped, regardless of wrap width. Previously a wide enough width — including `unwrap`'s unlimited one — could merge it into the following body text and backslash-escape its brackets, turning a styled callout back into a plain quote containing literal `\[!NOTE\]` text. ([#17](https://github.com/Vusys/cm-tools/issues/17))
