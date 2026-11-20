@@ -91,7 +91,7 @@ final readonly class ReflowFixture
 
     public static function directory(): string
     {
-        return dirname(__DIR__).'/Fixtures/Reflow';
+        return __DIR__.'/../Fixtures/Reflow';
     }
 
     /**
